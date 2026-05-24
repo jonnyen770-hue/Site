@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Conoscimi</title>
+
+<style>
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #050b3a;
+  font-family: Arial, sans-serif;
+}
+
+/* STELLE */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+/* CENTRATURA PERFETTA */
+.container {
+  position: relative;
+  height: 100vh;
+}
+
+/* PULSANTE CENTRATO */
+.btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) perspective(800px) rotateX(15deg);
+
+  padding: 20px 40px;
+  font-size: 22px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 14px;
+
+  background: linear-gradient(145deg, #1e3a8a, #0b1a3d);
+  box-shadow: 0 12px 0 #020617;
+  z-index: 5;
+}
+
+.btn:active {
+  transform: translate(-50%, -50%) perspective(800px) rotateX(25deg);
+  box-shadow: 0 6px 0 #020617;
+}
+
+/* SCHEMI GRANDI */
+.schema {
+  position: absolute;
+  width: 200px;
+  padding: 20px;
+  font-size: 16px;
+
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 14px;
+  text-align: center;
+  color: white;
+  backdrop-filter: blur(8px);
+
+  opacity: 0;
+  transform: scale(0.7);
+  transition: 1.5s ease;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="stars"></canvas>
+
+<div class="container">
+  <button class="btn" onclick="show()">Conoscimi</button>
+
+
+  <div class="schema" id="s1">Competenze : <br>Creazione di siti web, editing di video e foto, conoscenze informatiche e tecniche pratiche. Posso realizzare interfacce semplici, Conosco le basi di programmazione e sviluppo web.</div>
+  
+  <div class="schema" id="s2">Skills : <br>Website creation, video and photo editing, computer skills, and practical techniques. I can create simple interfaces. I understand the basics of programming and web development.</div>
+  
+  <div class="schema" id="s3">Cosa offro : <br>Realizzo siti web e editing video per portfolio, piccole attività e progetti personali.
+Creo pagine moderne, responsive e facili da usare.
+Offro soluzioni semplici e funzionali.</div>
+
+  <div class="schema" id="s4">What I offer : <br>I create websites and video editing for portfolios, small businesses, and personal projects.
+I create modern, responsive, and easy-to-use pages.
+I offer simple and functional solutions.</div>
+
+  <div class="schema" id="s5">Io : <br>Sono uno sviluppatore alle prime esperienze, appassionato di tecnologia e design.
+Lavoro con attenzione ai dettagli e punto a creare progetti semplici ma efficaci.
+Mi impegno a migliorare continuamente.</div>
+
+  <div class="schema" id="s6">Me : <br>I'm a novice developer, passionate about technology and design.
+I work with attention to detail and aim to create simple yet effective projects.
+I'm committed to continuous improvement.</div>
+
+</div>
+<audio id="bgMusic" loop>
+  <source src="music-ambient.mp3" type="audio/mpeg">
+</audio>
+<script>
+// ===== STELLE =====
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let stars = [];
+
+for (let i = 0; i < 140; i++) {
+  stars.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 1.5,
+    speed: Math.random() * 0.3 + 0.1
+  });
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "white";
+
+  for (let s of stars) {
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fill();
+
+    s.y += s.speed;
+    if (s.y > canvas.height) {
+      s.y = 0;
+      s.x = Math.random() * canvas.width;
+    }
+  }
+
+  requestAnimationFrame(draw);
+}
+draw();
+
+// ===== MENU RADIALE STATICO =====
+const schemas = [
+  document.getElementById("s1"),
+  document.getElementById("s2"),
+  document.getElementById("s3"),
+  document.getElementById("s4"),
+  document.getElementById("s5"),
+  document.getElementById("s6")
+];
+
+let shown = false;
+
+function show() {
+  const audio = document.getElementById("bgMusic");
+
+  audio.volume = 0.4;
+
+  const playPromise = audio.play();
+
+  if (playPromise !== undefined) {
+    playPromise
+      .then(() => {
+        console.log("Audio partito ✔");
+      })
+      .catch((err) => {
+        console.log("Audio bloccato dal browser:", err);
+      });
+  }
+  
+  const cx = window.innerWidth / 2;
+  const cy = window.innerHeight / 2;
+
+  const radius = 260; // 🔥 più lontani dal centro
+  const total = schemas.length;
+
+  schemas.forEach((el, i) => {
+    const angle = (Math.PI * 2 / total) * i;
+
+    const x = cx + Math.cos(angle) * radius;
+    const y = cy + Math.sin(angle) * radius;
+
+    el.style.left = x + "px";
+    el.style.top = y + "px";
+
+    el.style.opacity = 1;
+    el.style.transform = "translate(-50%, -50%) scale(1)";
+  });
+
+  shown = true;
+}
+const meteorCanvas = document.getElementById("meteors");
+const mctx = meteorCanvas.getContext("2d");
+
+meteorCanvas.width = window.innerWidth;
+meteorCanvas.height = window.innerHeight;
+let meteors = [];
+
+</script>
+
+</body>
+</html>
